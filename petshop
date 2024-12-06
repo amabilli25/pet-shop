@@ -1,0 +1,71 @@
+import tkinter as tk
+from tkinter import ttk
+
+def adicionar_pet():
+    tipo_pet = tipo_var.get()
+    nome = nome_entry.get()
+    idade = idade_entry.get()
+    raca = raca_entry.get()
+
+    if not nome or not idade or not raca:
+        status_label.config(text="Preencha todos os campos!", fg="red")
+        return
+
+    try:
+        idade = int(idade)
+    except ValueError:
+        status_label.config(text="A idade deve ser um número!", fg="red")
+        return
+
+    pet_info = f"{tipo_pet} - Nome: {nome}, Idade: {idade} anos, Raça: {raca}"
+    lista_pets.insert(tk.END, pet_info)
+    nome_entry.delete(0, tk.END)
+    idade_entry.delete(0, tk.END)
+    raca_entry.delete(0, tk.END)
+    status_label.config(text="Pet adicionado com sucesso!", fg="green")
+
+def limpar_lista():
+    lista_pets.delete(0, tk.END)
+    status_label.config(text="Lista limpa com sucesso!", fg="green")
+
+root = tk.Tk()
+root.title("Pet Shop")
+root.geometry("400x500")
+root.resizable(False, False)
+
+tk.Label(root, text="Cadastro de Pets", font=("Arial", 16)).pack(pady=10)
+
+frame_form = tk.Frame(root)
+frame_form.pack(pady=10)
+
+tk.Label(frame_form, text="Tipo do Pet:").grid(row=0, column=0, sticky="w")
+tipo_var = ttk.Combobox(frame_form, values=["Cachorro", "Gato"], state="readonly")
+tipo_var.grid(row=0, column=1, padx=5, pady=5)
+tipo_var.set("Cachorro")
+
+tk.Label(frame_form, text="Nome:").grid(row=1, column=0, sticky="w")
+nome_entry = tk.Entry(frame_form)
+nome_entry.grid(row=1, column=1, padx=5, pady=5)
+
+tk.Label(frame_form, text="Idade:").grid(row=2, column=0, sticky="w")
+idade_entry = tk.Entry(frame_form)
+idade_entry.grid(row=2, column=1, padx=5, pady=5)
+
+tk.Label(frame_form, text="Raça:").grid(row=3, column=0, sticky="w")
+raca_entry = tk.Entry(frame_form)
+raca_entry.grid(row=3, column=1, padx=5, pady=5)
+
+adicionar_btn = tk.Button(root, text="Adicionar Pet", command=adicionar_pet, bg="#4CAF50", fg="white")
+adicionar_btn.pack(pady=10)
+
+tk.Label(root, text="Lista de Pets Cadastrados:", font=("Arial", 12)).pack(pady=10)
+lista_pets = tk.Listbox(root, width=50, height=10)
+lista_pets.pack(pady=10)
+
+limpar_btn = tk.Button(root, text="Limpar Lista", command=limpar_lista, bg="#f44336", fg="white")
+limpar_btn.pack(pady=10)
+
+status_label = tk.Label(root, text="", font=("Arial", 10))
+status_label.pack(pady=5)
+
+root.mainloop()
